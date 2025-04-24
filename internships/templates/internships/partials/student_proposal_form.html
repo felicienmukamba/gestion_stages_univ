@@ -1,0 +1,42 @@
+{# gestion_stages_univ/internships/templates/internships/partials/student_proposal_form.html #}
+{# Ce template est conçu pour être chargé via AJAX dans le corps d'une modale. #}
+{# Il affiche le formulaire permettant à l'étudiant de proposer des entreprises. #}
+
+<form method="post" action="{% url 'proposer_entreprises_etudiant' %}"> {# L'action pointe vers la vue qui traite la soumission #}
+    {% csrf_token %} {# Très important pour la sécurité dans Django #}
+
+    {# Afficher les messages d'erreur non liés aux champs #}
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+
+    {# Afficher les champs du formulaire manuellement pour un meilleur contrôle du style #}
+    <div class="mb-3">
+        <label for="{{ form.entreprise_proposee_1.id_for_label }}" class="form-label">{{ form.entreprise_proposee_1.label }}</label>
+        {{ form.entreprise_proposee_1 }} {# Le champ de sélection (ModelChoiceField) #}
+        {% if form.entreprise_proposee_1.errors %}
+            <div class="form-text text-danger">{{ form.entreprise_proposee_1.errors }}</div> {# Afficher les erreurs spécifiques au champ #}
+        {% endif %}
+        {% if form.entreprise_proposee_1.help_text %}
+             <div class="form-text text-muted">{{ form.entreprise_proposee_1.help_text }}</div> {# Afficher le texte d'aide #}
+        {% endif %}
+    </div>
+
+    <div class="mb-3">
+        <label for="{{ form.entreprise_proposee_2.id_for_label }}" class="form-label">{{ form.entreprise_proposee_2.label }}</label>
+        {{ form.entreprise_proposee_2 }} {# Le champ de sélection (ModelChoiceField) #}
+         {% if form.entreprise_proposee_2.errors %}
+            <div class="form-text text-danger">{{ form.entreprise_proposee_2.errors }}</div> {# Afficher les erreurs spécifiques au champ #}
+        {% endif %}
+        {% if form.entreprise_proposee_2.help_text %}
+             <div class="form-text text-muted">{{ form.entreprise_proposee_2.help_text }}</div> {# Afficher le texte d'aide #}
+        {% endif %}
+    </div>
+
+    {# Vous pouvez ajouter d'autres champs si le formulaire StudentProposalForm en avait plus #}
+
+    {# Bouton de soumission du formulaire #}
+    <button type="submit" class="btn btn-primary">Soumettre les Propositions</button>
+</form>

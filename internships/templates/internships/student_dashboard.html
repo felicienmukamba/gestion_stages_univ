@@ -1,0 +1,56 @@
+{# gestion_stages_univ/internships/templates/internships/student_dashboard.html #}
+{% extends 'internships/base.html' %} {# Étend le template de base #}
+
+{% block title %}Tableau de Bord Étudiant - {{ block.super }}{% endblock %} {# Définit le titre de la page #}
+
+{% block content %} {# Démarre le bloc de contenu principal #}
+<h1 class="mb-4">Tableau de Bord Étudiant</h1>
+
+<p>Bienvenue, {{ user.username }}. Voici les informations relatives à votre stage.</p>
+
+{# Afficher les informations du stage si une instance Internship existe pour cet étudiant #}
+{% if mon_stage %}
+<div class="card">
+    <div class="card-header">
+        Informations de mon Stage
+    </div>
+    <div class="card-body">
+        <p><strong>Statut :</strong> {{ mon_stage.get_statut_display }}</p>
+        <p><strong>Entreprise Sélectionnée :</strong> {{ mon_stage.entreprise_selectionnee.nom|default:"En attente de validation" }}</p>
+        <p><strong>Encadreur Affecté :</strong> {{ mon_stage.encadreur.nom_complet|default:"En attente d'affectation" }}</p>
+        <p><strong>Note :</strong> {{ mon_stage.note|default:"Non noté" }}</p>
+
+        {# Afficher les dates importantes si elles existent #}
+        {% if mon_stage.date_proposition_soumise %}<p><strong>Date de proposition soumise :</strong> {{ mon_stage.date_proposition_soumise|date:"d/m/Y H:i" }}</p>{% endif %}
+        {% if mon_stage.date_validation %}<p><strong>Date de validation :</strong> {{ mon_stage.date_validation|date:"d/m/Y H:i" }}</p>{% endif %}
+        {% if mon_stage.date_encadreur_affecte %}<p><strong>Date d'affectation encadreur :</strong> {{ mon_stage.date_encadreur_affecte|date:"d/m/Y H:i" }}</p>{% endif %}
+        {% if mon_stage.date_debut %}<p><strong>Date de début de stage :</strong> {{ mon_stage.date_debut|date:"d/m/Y" }}</p>{% endif %}
+        {% if mon_stage.date_fin %}<p><strong>Date de fin de stage :</strong> {{ mon_stage.date_fin|date:"d/m/Y" }}</p>{% endif %}
+        {% if mon_stage.date_notation %}<p><strong>Date de notation :</strong> {{ mon_stage.date_notation|date:"d/m/Y H:i" }}</p>{% endif %}
+
+        {# Optionnel: Bouton pour générer le rapport PDF si le stage est terminé/noté #}
+        {% if mon_stage.statut == 'TERMINE' %}
+             {# Assurez-vous d'avoir une URL nommée 'generate_student_supervisor_pdf_report' et une vue correspondante #}
+             <a href="{% url 'generate_student_supervisor_pdf_report' mon_stage.pk %}" class="btn btn-success mt-3" target="_blank">
+                 Télécharger Rapport PDF
+             </a>
+        {% endif %}
+
+    </div>
+</div>
+{% else %}
+{# Message si aucune instance Internship n'existe encore pour cet étudiant #}
+<div class="alert alert-info" role="alert">
+    Aucune information de stage disponible pour le moment. Veuillez proposer des entreprises pour commencer le processus.
+</div>
+ {# Bouton pour proposer des entreprises si aucune instance Internship n'existe #}
+ {# Assurez-vous d'avoir une URL nommée 'proposer_entreprises_etudiant' et une vue correspondante #}
+ <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#crudModal"
+         data-url="{% url 'proposer_entreprises_etudiant' %}" data-title="Proposer des Entreprises">
+     Proposer des Entreprises
+ </button>
+
+{% endif %}
+
+
+{% endblock %} {# Termine le bloc de contenu principal #}

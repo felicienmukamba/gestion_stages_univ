@@ -1,0 +1,33 @@
+{# gestion_stages_univ/internships/templates/internships/partials/internship_list_rows.html #}
+{% for stage in stages %}
+    <tr id="internship-row-{{ stage.pk }}">
+        <td>{{ stage.etudiant.nom_complet }}</td>
+        <td>{{ stage.etudiant.promotion.nom|default:"-" }} {{ stage.etudiant.promotion.annee_academique|default:"" }}</td>
+        <td>{{ stage.get_statut_display }}</td>
+        <td>{{ stage.etudiant.entreprise_proposee_1.nom|default:"-" }}</td>
+        <td>{{ stage.etudiant.entreprise_proposee_2.nom|default:"-" }}</td>
+        <td>{{ stage.entreprise_selectionnee.nom|default:"-" }}</td>
+        <td>{{ stage.encadreur.nom_complet|default:"-" }}</td>
+        <td>{% if stage.note is not None %}{{ stage.note }}/100{% else %}-{% endif %}</td>
+        <td>
+            {# Bouton pour valider/affecter (modale) #}
+            {# Condition corrigée: Utilisation de 'or' au lieu de 'in [...]' #}
+            {% if stage.statut == 'PROPOSITION_SOUMISE' or stage.statut == 'PROPOSITION_VALIDEE' or stage.statut == 'ENCADREUR_AFFECTE' %}
+                <button type="button" class="btn btn-sm btn-primary"
+                        data-bs-toggle="modal" data-bs-target="#crudModal"
+                        data-url="{% url 'valider_affecter_stage_modal' pk=stage.pk %}"
+                        data-title="Valider / Affecter Encadreur ({{ stage.etudiant.nom_complet }})">
+                    Valider / Affecter
+                </button>
+            {% else %}
+                <button type="button" class="btn btn-sm btn-secondary" disabled>Traitement Terminé</button>
+            {% endif %}
+            {# Optionnel: Bouton pour modifier d'autres aspects du stage #}
+            {# Optionnel: Bouton pour supprimer un stage (attention aux conséquences) #}
+        </td>
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="9">Aucun stage enregistré ou correspondant aux critères.</td>
+    </tr>
+{% endfor %}

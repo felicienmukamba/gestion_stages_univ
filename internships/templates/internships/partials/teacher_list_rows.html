@@ -1,0 +1,28 @@
+{# gestion_stages_univ/internships/templates/internships/partials/teacher_list_rows.html #}
+{% for enseignant in enseignants %}
+    <tr id="teacher-row-{{ enseignant.pk }}"> {# ID pour cibler la ligne lors de la mise à jour/suppression #}
+        <td>{{ enseignant.matricule }}</td>
+        <td>{{ enseignant.nom_complet }}</td>
+        <td>{{ enseignant.departement.nom|default:"-" }}</td> {# Afficher le nom du département ou un tiret #}
+        <td>
+            {# Bouton Modifier pour ouvrir la modale #}
+            <button type="button" class="btn btn-sm btn-secondary"
+                    data-bs-toggle="modal" data-bs-target="#crudModal"
+                    data-url="{% url 'modifier_enseignant_modal' pk=enseignant.pk %}"
+                    data-title="Modifier l'Enseignant : {{ enseignant.nom_complet }}">
+                Modifier
+            </button>
+            {# Bouton Supprimer pour ouvrir la modale de confirmation #}
+             <button type="button" class="btn btn-sm btn-danger"
+                    data-bs-toggle="modal" data-bs-target="#crudModal"
+                    data-url="{% url 'supprimer_enseignant_modal' pk=enseignant.pk %}"
+                    data-title="Supprimer l'Enseignant : {{ enseignant.nom_complet }}">
+                Supprimer
+            </button>
+        </td>
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="4">Aucun enseignant enregistré.</td>
+    </tr>
+{% endfor %}

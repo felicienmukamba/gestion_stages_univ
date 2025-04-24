@@ -1,0 +1,102 @@
+{# gestion_stages_univ/internships/templates/internships/faculty_dashboard.html #}
+{% extends 'internships/base.html' %}
+
+{% block title %}Tableau de Bord Facultaire{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Tableau de Bord Facultaire</h1>
+
+<div class="row">
+    {# Section Statistiques #}
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                Statistiques Générales
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ statistiques.total_etudiants }}</h5>
+                                <p class="card-text">Total Étudiants</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 mb-3">
+                         <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ statistiques.total_enseignants }}</h5>
+                                <p class="card-text">Total Enseignants</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 mb-3">
+                         <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ statistiques.total_entreprises }}</h5>
+                                <p class="card-text">Total Entreprises</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 mb-3">
+                         <div class="card bg-warning">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ statistiques.propositions_soumises }}</h5>
+                                <p class="card-text">Propositions en attente de validation</p>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-sm-6 col-md-4 mb-3">
+                         <div class="card bg-info">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ statistiques.stages_affectes }}</h5>
+                                <p class="card-text">Stages avec encadreur affecté</p>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-sm-6 col-md-4 mb-3">
+                         <div class="card bg-success">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ statistiques.stages_termines }}</h5>
+                                <p class="card-text">Stages terminés</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Section Navigation/Liens Rapides #}
+    <div class="col-md-4">
+        <div class="card">
+             <div class="card-header">
+                Navigation Rapide
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="{% url 'liste_enseignants_facultaire' %}" class="list-group-item list-group-item-action">
+                        Gérer les Enseignants
+                    </a>
+                    <a href="{% url 'liste_etudiants_facultaire' %}" class="list-group-item list-group-item-action">
+                        Gérer les Étudiants
+                    </a>
+                    <a href="{% url 'liste_entreprises_facultaire' %}" class="list-group-item list-group-item-action">
+                        Gérer les Entreprises
+                    </a>
+                     <a href="{% url 'liste_stages_facultaire' %}" class="list-group-item list-group-item-action">
+                        Consulter les Stages
+                    </a>
+                     <a href="{% url 'rapport_affectations_pdf' %}" class="list-group-item list-group-item-action" target="_blank">
+                        Rapport Affectations PDF
+                    </a>
+                    {# Ajoutez d'autres liens importants ici #}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

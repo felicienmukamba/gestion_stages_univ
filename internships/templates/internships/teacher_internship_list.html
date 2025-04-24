@@ -1,0 +1,28 @@
+{# gestion_stages_univ/internships/templates/internships/teacher_internship_list.html #}
+{% extends 'internships/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Mes Stages Encadrés{% endblock %}
+
+{% block content %}
+<h1>Stages que j'encadre</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Étudiant</th>
+            <th>Promotion</th>
+            <th>Entreprise Validée</th>
+            <th>Statut</th>
+            <th>Note Actuelle</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="teacher-internship-list-body"> {# ID pour potentiellement mettre à jour la liste dynamiquement #}
+        {% include 'internships/partials/teacher_internship_rows.html' %} {# Inclure les lignes du tableau #}
+    </tbody>
+</table>
+
+{# La structure de la modale est dans base.html ou partials/crud_modal.html inclus dans base.html #}
+
+{% endblock %}

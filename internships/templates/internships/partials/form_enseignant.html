@@ -1,0 +1,29 @@
+{# gestion_stages_univ/internships/templates/internships/partials/form_enseignant.html #}
+{% load crispy_forms_tags %}
+
+{# Le formulaire est la seule chose ici. L'action et la méthode sont importantes. #}
+{# L'action est définie dans l'attribut data-url du bouton qui ouvre la modale #}
+{# La méthode sera POST pour la soumission #}
+<form method="post" action="{{ request.path }}"> {# Utilise le chemin actuel (l'URL de la vue modale) #}
+    {% csrf_token %} {# Token de sécurité obligatoire dans tous les formulaires POST Django #}
+
+    {% comment %}
+    Utilisez crispy forms pour rendre le formulaire facilement.
+    Si vous n'utilisez pas crispy forms, rendez les champs manuellement:
+    {{ form.as_p }}
+    ou
+    {{ form.matricule.label_tag }} {{ form.matricule }} {{ form.matricule.errors }}
+    ... pour chaque champ
+    {% endcomment %}
+
+    {{ form|crispy }}
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        {# Bouton de soumission. Type="submit" pour que le formulaire soit soumis #}
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
+</form>
+
+{# Important: ce template ne doit contenir QUE le formulaire et ses boutons d'action de modale #}
+{# Pas de <html>, <body>, etc. #}

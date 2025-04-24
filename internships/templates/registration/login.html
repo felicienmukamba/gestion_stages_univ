@@ -1,0 +1,29 @@
+{# gestion_stages_univ/internships/templates/registration/login.html #}
+{% extends 'internships/base.html' %}
+{% load crispy_forms_tags %} {# Assurez-vous que crispy_forms est installé et configuré si vous l'utilisez #}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h2>Connexion</h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {# Affiche le formulaire de connexion intégré de Django #}
+                    {{ form|crispy }}
+
+                    <button type="submit" class="btn btn-primary">Se Connecter</button>
+                </form>
+                <p class="mt-3">
+                    <a href="{% url 'password_reset' %}">Mot de passe oublié ?</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

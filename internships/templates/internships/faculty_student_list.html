@@ -1,0 +1,33 @@
+{# gestion_stages_univ/internships/templates/internships/faculty_student_list.html #}
+{% extends 'internships/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Gestion des Étudiants{% endblock %}
+
+{% block content %}
+<h1>Gestion des Étudiants</h1>
+
+{# Bouton pour ouvrir la modale d'ajout #}
+<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#crudModal" data-url="{% url 'ajouter_etudiant_modal' %}" data-title="Ajouter un Étudiant">
+    Ajouter un Étudiant
+</button>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Matricule</th>
+            <th>Nom Complet</th>
+            <th>Promotion</th>
+            <th>Département</th>
+            <th>Faculté</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="student-list-body"> {# ID pour mettre à jour la liste dynamiquement #}
+        {% include 'internships/partials/student_list_rows.html' %} {# Inclure les lignes du tableau #}
+    </tbody>
+</table>
+
+{# La structure de la modale est dans base.html ou partials/crud_modal.html inclus dans base.html #}
+
+{% endblock %}

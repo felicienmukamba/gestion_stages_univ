@@ -1,0 +1,13 @@
+{# gestion_stages_univ/internships/templates/internships/partials/form_entreprise.html #}
+{% load crispy_forms_tags %}
+
+<form method="post" action="{{ request.path }}">
+    {% csrf_token %}
+
+    {{ form|crispy }}
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
+</form>

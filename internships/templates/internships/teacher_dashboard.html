@@ -1,0 +1,63 @@
+{# gestion_stages_univ/internships/templates/internships/teacher_dashboard.html #}
+{% extends 'internships/base.html' %} {# Étend le template de base #}
+
+{% block title %}Tableau de Bord Enseignant - {{ block.super }}{% endblock %} {# Définit le titre de la page #}
+
+{% block content %} {# Démarre le bloc de contenu principal #}
+<h1 class="mb-4">Tableau de Bord Enseignant</h1>
+
+<p>Bienvenue, {{ user.username }}. En tant qu'enseignant, vous pouvez consulter les stages dont vous êtes l'encadreur.</p>
+
+{# Afficher la liste des stages encadrés par cet enseignant #}
+<h2 class="mt-4">Mes Stages Encadrés</h2>
+
+{% if stages_encadres %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Étudiant</th>
+                <th>Entreprise Sélectionnée</th>
+                <th>Statut</th>
+                <th>Note</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stage in stages_encadres %}
+            <tr>
+                <td>{{ stage.etudiant.nom_complet }} ({{ stage.etudiant.matricule }})</td>
+                <td>{{ stage.entreprise_selectionnee.nom|default:"N/A" }}</td> {# Afficher N/A si pas encore d'entreprise sélectionnée #}
+                <td>{{ stage.get_statut_display }}</td> {# Affiche le libellé lisible du statut #}
+                <td>{{ stage.note|default:"Non noté" }}</td> {# Afficher "Non noté" si pas de note #}
+                <td>
+                    {# Bouton pour noter le stage si le statut le permet et si pas déjà noté #}
+                    {% if stage.statut == 'EN_COURS' or stage.statut == 'ENCADREUR_AFFECTE' and not stage.is_graded %}
+                         {# Assurez-vous d'avoir une URL nommée 'formulaire_notation_modal' et une vue correspondante #}
+                         {# Le data-url doit pointer vers la vue qui renvoie le formulaire de notation pour ce stage #}
+                         <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#crudModal"
+                                 data-url="{% url 'formulaire_notation_modal' stage.pk %}" data-title="Noter le Stage de {{ stage.etudiant.nom_complet }}">
+                             Noter
+                         </button>
+                    {% elif stage.is_graded %}
+                         <span class="badge bg-success">Noté</span>
+                         {# Optionnel: Bouton pour modifier la note si nécessaire #}
+                         {# <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#crudModal"
+                                 data-url="{% url 'formulaire_notation_modal' stage.pk %}" data-title="Modifier la Note de {{ stage.etudiant.nom_complet }}">
+                             Modifier Note
+                         </button> #}
+                    {% endif %}
+                    {# Optionnel: Bouton pour consulter les détails du stage #}
+                    {# <a href="{% url 'details_stage_enseignant' stage.pk %}" class="btn btn-sm btn-info">Détails</a> #}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p>Vous n'avez pas encore de stages encadrés.</p>
+{% endif %}
+
+
+{% endblock %} {# Termine le bloc de contenu principal #}

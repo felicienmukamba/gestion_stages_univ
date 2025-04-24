@@ -1,0 +1,114 @@
+{# gestion_stages_univ/internships/templates/internships/base.html #}
+
+{% load static %} {# Toujours nécessaire pour votre propre style.css et modal_crud.js #}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gestion des Stages{% endblock %}</title>
+    {# Inclure Bootstrap CSS depuis un CDN (recommandé) #}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    {# SUPPRIMEZ ou commentez cette ligne si vous utilisez le CDN ci-dessus pour Bootstrap CSS : #}
+    {# <link rel="stylesheet" href="{% static 'internships/css/bootstrap.min.css' %}"> #}
+
+    {# Inclure votre propre CSS personnalisé (utilisez {% static %}) #}
+    <link rel="stylesheet" href="{% static 'internships/css/style.css' %}">
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">Gestion Stages</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {# Liens de navigation conditionnels selon le rôle #}
+                    {% if user.is_authenticated %}
+                        {# Ce lien nécessite que vous ayez une URL et une vue nommée 'home_dashboard' qui gère la redirection par rôle #}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'home_dashboard' %}">Accueil Tableau de Bord</a></li>
+
+                        {% if user.est_facultaire %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'tableau_de_bord_facultaire' %}">Tableau de Bord Facultaire</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'liste_enseignants_facultaire' %}">Gestion Enseignants</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'liste_etudiants_facultaire' %}">Gestion Étudiants</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'liste_entreprises_facultaire' %}">Gestion Entreprises</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'liste_stages_facultaire' %}">Consulter Stages</a></li>
+                            {# Ajoutez ici d'autres liens facultaires #}
+                        {% elif user.est_enseignant %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'tableau_de_bord_enseignant' %}">Tableau de Bord Enseignant</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'liste_stages_encadres' %}">Mes Stages Encadrés</a></li>
+                            {# Ajoutez ici d'autres liens enseignants #}
+                        {% elif user.est_etudiant %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'tableau_de_bord_etudiant' %}">Tableau de Bord Étudiant</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'proposer_entreprises_etudiant' %}">Proposer Entreprises</a></li>
+                            {# Ajoutez ici d'autres liens étudiants #}
+                        {% endif %}
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    {% if user.is_authenticated %}
+                        {# Menu déroulant pour le compte utilisateur (nécessite le JS de Bootstrap) #}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Bienvenue, {{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" href="{% url 'password_change' %}">Changer Mot de Passe</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Déconnexion</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Connexion</a>
+                        </li>
+                        {# Les liens de réinitialisation sont sur la page de connexion, pas besoin de les mettre ici #}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {# Affichage des messages flash (success, error, warning, info) #}
+        {% if messages %}
+            {% for message in messages %}
+                {# Adapter les classes d'alerte si vos tags de message sont différents (ex: 'error' au lieu de 'danger') #}
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}
+        {# Le contenu spécifique de chaque page viendra ici #}
+        {% endblock %}
+    </div>
+
+    {# Inclure le bundle Bootstrap JS (inclut Popper.js) depuis le même CDN que le CSS #}
+    {# C'est la ligne cruciale pour les composants interactifs de Bootstrap #}
+    {# Placez les scripts JS à la fin du <body> pour un meilleur chargement de la page #}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    {# Inclure votre script JavaScript personnalisé (utilisez {% static %}) #}
+    {# Il est important que ce script soit chargé APRÈS le script Bootstrap #}
+    <script src="{% static 'internships/js/modal_crud.js' %}"></script>
+
+    {% block extra_js %}
+    {# Pour inclure des scripts JS spécifiques à certaines pages #}
+    {% endblock %}
+
+    {# Optionnel: Inclure jQuery si VRAIMENT nécessaire pour d'autres scripts, mais pas pour Bootstrap 5 #}
+    {# <script src="{% static 'internships/js/jquery-3.6.0.min.js' %}"></script> #}
+
+    {# Inclure la structure de la modale générique #}
+    {# Assurez-vous que ce template partials/crud_modal.html existe dans le bon répertoire #}
+    {% include 'internships/partials/crud_modal.html' %}
+
+</body>
+</html>

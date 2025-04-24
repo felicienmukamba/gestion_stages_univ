@@ -1,0 +1,30 @@
+{# gestion_stages_univ/internships/templates/internships/partials/student_list_rows.html #}
+{% for etudiant in etudiants %}
+    <tr id="student-row-{{ etudiant.pk }}"> {# ID pour cibler la ligne #}
+        <td>{{ etudiant.matricule }}</td>
+        <td>{{ etudiant.nom_complet }}</td>
+        <td>{{ etudiant.promotion.nom|default:"-" }} {{ etudiant.promotion.annee_academique|default:"" }}</td>
+        <td>{{ etudiant.promotion.departement.nom|default:"-" }}</td>
+        <td>{{ etudiant.promotion.departement.faculte.nom|default:"-" }}</td>
+        <td>
+            {# Bouton Modifier pour ouvrir la modale #}
+            <button type="button" class="btn btn-sm btn-secondary"
+                    data-bs-toggle="modal" data-bs-target="#crudModal"
+                    data-url="{% url 'modifier_etudiant_modal' pk=etudiant.pk %}"
+                    data-title="Modifier l'Étudiant : {{ etudiant.nom_complet }}">
+                Modifier
+            </button>
+            {# Bouton Supprimer pour ouvrir la modale de confirmation #}
+             <button type="button" class="btn btn-sm btn-danger"
+                    data-bs-toggle="modal" data-bs-target="#crudModal"
+                    data-url="{% url 'supprimer_etudiant_modal' pk=etudiant.pk %}"
+                    data-title="Supprimer l'Étudiant : {{ etudiant.nom_complet }}">
+                Supprimer
+            </button>
+        </td>
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="6">Aucun étudiant enregistré.</td>
+    </tr>
+{% endfor %}

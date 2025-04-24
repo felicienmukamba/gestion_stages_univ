@@ -1,0 +1,11 @@
+{# gestion_stages_univ/internships/templates/internships/partials/confirm_delete_entreprise.html #}
+{# Ce template est chargé par la vue entreprise_delete_modal (GET) #}
+<form method="post" action="{% url 'supprimer_entreprise_modal' pk=entreprise.pk %}">
+    {% csrf_token %}
+    <p>Êtes-vous sûr de vouloir supprimer l'entreprise "{{ entreprise.nom }}" ?</p>
+    <p>Cette action est irréversible.</p>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="submit" class="btn btn-danger">Confirmer la suppression</button>
+    </div>
+</form>

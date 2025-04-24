@@ -1,0 +1,26 @@
+{# gestion_stages_univ/internships/templates/internships/partials/form_notation.html #}
+{% load crispy_forms_tags %}
+
+{# Afficher les infos de l'étudiant pour le professeur #}
+{% with etudiant_stage=internship.etudiant %}
+    <p><strong>Étudiant :</strong> {{ etudiant_stage.nom_complet }} ({{ etudiant_stage.matricule }})</p>
+    <p><strong>Promotion :</strong> {{ etudiant_stage.promotion.nom }} {{ etudiant_stage.promotion.annee_academique }}</p>
+     <p><strong>Entreprise :</strong> {{ internship.entreprise_selectionnee.nom|default:"Non définie" }}</p>
+    <hr>
+{% endwith %}
+
+
+<form method="post" action="{% url 'formulaire_notation_modal' pk=internship.pk %}">
+    {% csrf_token %}
+
+    {% comment %}
+    Afficher le champ form.note du formulaire InternshipGradingForm
+    {% endcomment %}
+
+    {{ form|crispy }}
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="submit" class="btn btn-primary">Enregistrer la Note</button>
+    </div>
+</form>

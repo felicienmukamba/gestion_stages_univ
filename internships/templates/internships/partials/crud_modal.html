@@ -1,0 +1,17 @@
+{# gestion_stages_univ/internships/templates/internships/partials/crud_modal.html #}
+<div class="modal fade" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="crudModalLabel">...</h5>{# Le titre sera mis à jour par JS #}
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          </div>
+        {# Les boutons de la modale (Sauvegarder, Confirmer, Annuler) peuvent aussi être chargés dynamiquement avec le contenu #}
+        {# Ou bien les gérer ici et déclencher la soumission du formulaire interne via JS #}
+      </div>
+    </div>
+  </div>
+  
+  {# NOTE IMPORTANTE : Assurez-vous que ce template est inclus une seule fois dans votre base.html ou le template qui en hérite. #}

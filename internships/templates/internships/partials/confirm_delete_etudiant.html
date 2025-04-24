@@ -1,0 +1,11 @@
+{# gestion_stages_univ/internships/templates/internships/partials/confirm_delete_etudiant.html #}
+{# Ce template est chargé par la vue etudiant_delete_modal (GET) #}
+<form method="post" action="{% url 'supprimer_etudiant_modal' pk=etudiant.pk %}">
+    {% csrf_token %}
+    <p>Êtes-vous sûr de vouloir supprimer l'étudiant "{{ etudiant.nom_complet }}" ?</p>
+    <p>Cette action est irréversible et supprimera son compte utilisateur lié ainsi que son éventuel enregistrement de stage.</p>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="submit" class="btn btn-danger">Confirmer la suppression</button>
+    </div>
+</form>

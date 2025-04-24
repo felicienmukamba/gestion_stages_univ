@@ -1,0 +1,28 @@
+{# gestion_stages_univ/internships/templates/internships/partials/teacher_internship_rows.html #}
+{% for stage in stages_a_noter %} {# Notez bien que la variable ici est 'stages_a_noter' #}
+    <tr id="internship-row-{{ stage.pk }}">
+        <td>{{ stage.etudiant.nom_complet }}</td>
+        <td>{{ stage.etudiant.promotion.nom|default:"-" }} {{ stage.etudiant.promotion.annee_academique|default:"" }}</td>
+        <td>{{ stage.entreprise_selectionnee.nom|default:"-" }}</td>
+        <td>{{ stage.get_statut_display }}</td>
+        <td>{% if stage.note is not None %}{{ stage.note }}/100{% else %}-{% endif %}</td>
+        <td>
+            {# Bouton pour noter l'étudiant (modale) #}
+            {# Condition corrigée: Utilisation de 'and not' au lieu de 'not in [...]' #}
+             {% if stage.statut != 'EN_ATTENTE_PROPOSITION' and stage.statut != 'PROPOSITION_SOUMISE' %} {# Ne peut noter que si validé ou affecté ou en cours ou terminé #}
+                <button type="button" class="btn btn-sm btn-primary"
+                        data-bs-toggle="modal" data-bs-target="#crudModal"
+                        data-url="{% url 'noter_etudiant_modal' pk=stage.pk %}"
+                        data-title="Noter {{ stage.etudiant.nom_complet }}">
+                    {% if stage.note is not None %}Modifier la Note{% else %}Noter l'Étudiant{% endif %}
+                </button>
+             {% else %}
+                 <button type="button" class="btn btn-sm btn-secondary" disabled>En attente validation</button>
+             {% endif %}
+        </td>
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="6">Vous n'encadrez aucun stage actuellement.</td>
+    </tr>
+{% endfor %}

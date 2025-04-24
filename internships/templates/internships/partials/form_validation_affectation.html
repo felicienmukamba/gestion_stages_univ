@@ -1,0 +1,39 @@
+{# gestion_stages_univ/internships/templates/internships/partials/form_validation_affectation.html #}
+{% load crispy_forms_tags %}
+
+{# Afficher les propositions de l'étudiant pour aider le facultaire #}
+{% with etudiant_stage=internship.etudiant %}
+    <p><strong>Étudiant :</strong> {{ etudiant_stage.nom_complet }} ({{ etudiant_stage.matricule }})</p>
+    <p><strong>Promotion :</strong> {{ etudiant_stage.promotion.nom }} {{ etudiant_stage.promotion.annee_academique }}</p>
+    <p><strong>Propositions :</strong></p>
+    <ul>
+        <li>1ère : {{ etudiant_stage.entreprise_proposee_1.nom|default:"Non proposée" }}</li>
+        <li>2ème : {{ etudiant_stage.entreprise_proposee_2.nom|default:"Non proposée" }}</li>
+    </ul>
+    <hr>
+{% endwith %}
+
+
+<form method="post" action="{% url 'valider_affecter_stage_modal' pk=internship.pk %}">
+    {% csrf_token %}
+
+    {% comment %}
+    Afficher les champs du formulaire InternshipValidationForm:
+    entreprise_selectionnee
+    encadreur
+    {% endcomment %}
+
+    {{ form|crispy }}
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        {# Bouton de soumission. Le texte peut varier selon si c'est une première affectation ou une modification #}
+        <button type="submit" class="btn btn-primary">
+            {% if internship.statut == 'PROPOSITION_SOUMISE' %}
+                Valider et Affecter
+            {% else %}
+                Modifier l'Affectation
+            {% endif %}
+        </button>
+    </div>
+</form>

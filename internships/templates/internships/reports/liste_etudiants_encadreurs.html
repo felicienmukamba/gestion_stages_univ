@@ -1,0 +1,47 @@
+{# gestion_stages_univ/internships/templates/internships/reports/liste_etudiants_encadreurs.html #}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Rapport d'Affectation des Stages</title>
+    <style>
+        body { font-family: "DejaVu Sans", sans-serif; font-size: 10pt; } /* Utiliser une police supportant les caractères étendus */
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        h1, h2 { text-align: center; }
+        .date-rapport { text-align: right; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Liste des Étudiants et de leurs Encadreurs de Stage</h1>
+    <p class="date-rapport">Date du rapport : {{ date_rapport|date:"d/m/Y H:i" }}</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nom Étudiant</th>
+                <th>Matricule</th>
+                <th>Promotion</th>
+                <th>Département</th>
+                <th>Entreprise Affectée</th>
+                <th>Encadreur Affecté</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stage in stages %}
+            <tr>
+                <td>{{ stage.etudiant.nom_complet }}</td>
+                <td>{{ stage.etudiant.matricule }}</td>
+                <td>{{ stage.etudiant.promotion.nom|default:"-" }} {{ stage.etudiant.promotion.annee_academique|default:"" }}</td>
+                <td>{{ stage.etudiant.promotion.departement.nom|default:"-" }}</td>
+                <td>{{ stage.entreprise_selectionnee.nom|default:"Non affecté" }}</td>
+                <td>{{ stage.encadreur.nom_complet|default:"Non affecté" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p>Total des stages avec encadreurs affectés : {{ stages|length }}</p>
+</body>
+</html>

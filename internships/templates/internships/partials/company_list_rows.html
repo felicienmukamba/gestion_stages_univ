@@ -1,0 +1,33 @@
+{# gestion_stages_univ/internships/templates/internships/partials/company_list_rows.html #}
+{% for entreprise in entreprises %}
+    <tr id="company-row-{{ entreprise.pk }}"> {# ID pour cibler la ligne #}
+        <td>{{ entreprise.nom }}</td>
+        <td>{{ entreprise.adresse|default:"-" }}</td>
+        <td>
+            {% if entreprise.personne_contact %}{{ entreprise.personne_contact }}{% endif %}
+            {% if entreprise.email_contact %}<br>{{ entreprise.email_contact }}{% endif %}
+            {% if entreprise.telephone_contact %}<br>{{ entreprise.telephone_contact }}{% endif %}
+            {% if not entreprise.personne_contact and not entreprise.email_contact and not entreprise.telephone_contact %}-{% endif %}
+        </td>
+        <td>
+            {# Bouton Modifier pour ouvrir la modale #}
+            <button type="button" class="btn btn-sm btn-secondary"
+                    data-bs-toggle="modal" data-bs-target="#crudModal"
+                    data-url="{% url 'modifier_entreprise_modal' pk=entreprise.pk %}"
+                    data-title="Modifier l'Entreprise : {{ entreprise.nom }}">
+                Modifier
+            </button>
+            {# Bouton Supprimer pour ouvrir la modale de confirmation #}
+             <button type="button" class="btn btn-sm btn-danger"
+                    data-bs-toggle="modal" data-bs-target="#crudModal"
+                    data-url="{% url 'supprimer_entreprise_modal' pk=entreprise.pk %}"
+                    data-title="Supprimer l'Entreprise : {{ entreprise.nom }}">
+                Supprimer
+            </button>
+        </td>
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="4">Aucune entreprise enregistrée.</td>
+    </tr>
+{% endfor %}

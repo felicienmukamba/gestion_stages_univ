@@ -1,0 +1,36 @@
+{# gestion_stages_univ/internships/templates/internships/faculty_internship_list.html #}
+{% extends 'internships/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Gestion des Stages{% endblock %}
+
+{% block content %}
+<h1>Liste des Stages</h1>
+
+{# Bouton pour générer le rapport PDF #}
+<a href="{% url 'rapport_affectations_pdf' %}" class="btn btn-secondary mb-3" target="_blank">
+    Générer Rapport PDF (Affectations)
+</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Étudiant</th>
+            <th>Promotion</th>
+            <th>Statut</th>
+            <th>Proposée 1</th>
+            <th>Proposée 2</th>
+            <th>Validée</th>
+            <th>Encadreur</th>
+            <th>Note</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="internship-list-body"> {# ID pour potentiellement mettre à jour la liste dynamiquement #}
+        {% include 'internships/partials/internship_list_rows.html' %} {# Inclure les lignes du tableau #}
+    </tbody>
+</table>
+
+{# La structure de la modale est dans base.html ou partials/crud_modal.html inclus dans base.html #}
+
+{% endblock %}
